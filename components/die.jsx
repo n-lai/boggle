@@ -6,7 +6,10 @@ const Die = React.createClass({
   },
 
   render() {
-    
+    const die = this.props.die;
+    return (
+      <div>{die.letter}</div>
+    )
   }
 });
 

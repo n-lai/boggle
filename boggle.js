@@ -38,14 +38,13 @@ function Board(gridSize) {
   this.gridSize = gridSize;
   this.grid = [];
   this.generateBoard();
-
 }
 
 Board.prototype.generateBoard = function() {
-  for (let i = 0; i < gridSize; i++) {
+  for (let i = 0; i < this.gridSize; i++) {
     this.grid.push([]);
-    for (let j = 0; j < gridSize; j++) {
-      this.grid.push(new Die(BOGGLE_DICE[i, j], this, [i, j]))
+    for (let j = 0; j < this.gridSize; j++) {
+      this.grid[i].push(new Die(BOGGLE_DICE[i][j], this, [i, j]))
     }
   }
 }
@@ -55,4 +54,9 @@ Board.prototype.onBoard = function(pos) {
     pos[0] >= 0 && pos[0] < this.gridSize &&
     pos[1] >= 0 && pos[1] < this.gridSize
   );
+};
+
+module.exports = {
+  Board,
+  Die
 };
