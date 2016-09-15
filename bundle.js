@@ -62,7 +62,7 @@
 
 	var Board = __webpack_require__(2);
 	var CurrentWord = __webpack_require__(176);
-	var Score = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./score\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var Score = __webpack_require__(177);
 	var React = __webpack_require__(4);
 	var Boggle = __webpack_require__(37);
 
@@ -21673,6 +21673,25 @@
 	});
 
 	module.exports = CurrentWord;
+
+/***/ },
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(4);
+
+	var Score = React.createClass({
+	  displayName: "Score",
+	  render: function render() {
+	    var currentList = this.props.currentList;
+	    var words = currentList.keys();
+	    var scores = currentList.values();
+	  }
+	});
+
+	module.exports = Score;
 
 /***/ }
 /******/ ]);
