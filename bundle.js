@@ -72,25 +72,40 @@
 	    var board = new Boggle.Board(5);
 	    return { board: board, currentWord: [], submittedWords: {}, clickedDice: [] };
 	  },
+	  checkIfNotClicked: function checkIfNotClicked(pos) {
+	    var _this = this;
+
+	    var previousDice = this.state.clickedDice;
+	    var notClicked = true;
+
+	    previousDice.slice(0, -1).forEach(function (die) {
+	      if (_this.checkEqualDie(die, pos)) {
+	        notClicked = false;
+	      }
+	    });
+
+	    return notClicked;
+	  },
+	  checkEqualDie: function checkEqualDie(pos1, pos2) {
+	    return pos1[0] === pos2[0] && pos1[1] === pos2[1];
+	  },
 	  updateLetters: function updateLetters(pos, letter) {
 	    var board = this.state.board;
 
-	    var clickedDice = this.state.clickedDice;
-	    var lastPair = clickedDice.slice(-1)[0];
+	    var previousDice = this.state.clickedDice;
+	    var lastPair = previousDice.slice(-1)[0];
 
 	    var newWord = this.state.currentWord;
 
-	    if (clickedDice.length > 0 && lastPair[0] === pos[0] && lastPair[1] === pos[1]) {
-	      clickedDice.pop();
+	    if (previousDice.length > 0 && this.checkEqualDie(lastPair, pos)) {
+	      previousDice.pop();
 	      newWord.pop();
-	    } else if (clickedDice.length === 0 || board.checkValidMove(lastPair, pos)) {
-	      clickedDice.push(pos);
+	    } else if (previousDice.length === 0 || board.checkValidMove(lastPair, pos) && this.checkIfNotClicked(pos)) {
+	      previousDice.push(pos);
 	      newWord.push(letter);
-	    } else {
-	      console.log('invalid move');
 	    }
 
-	    this.setState({ clickedDice: clickedDice, currentWord: newWord });
+	    this.setState({ clickedDice: previousDice, currentWord: newWord });
 	  },
 	  updateScoreBoard: function updateScoreBoard(word) {
 	    var previousWords = this.state.submittedWords;

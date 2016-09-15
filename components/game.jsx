@@ -12,26 +12,41 @@ const Game = React.createClass({
     return ({ board: board, currentWord: [], submittedWords: {}, clickedDice: [] });
   },
 
+  checkIfNotClicked(pos) {
+    const previousDice = this.state.clickedDice;
+    let notClicked = true;
+
+    previousDice.slice(0, -1).forEach(die => {
+      if (this.checkEqualDie(die, pos)) {
+        notClicked = false;
+      }
+    });
+
+    return notClicked;
+  },
+
+  checkEqualDie(pos1, pos2) {
+    return pos1[0] === pos2[0] && pos1[1] === pos2[1]
+  },
+
   updateLetters(pos, letter) {
     const board = this.state.board;
 
-    const clickedDice = this.state.clickedDice;
-    const lastPair = clickedDice.slice(-1)[0];
+    const previousDice = this.state.clickedDice;
+    const lastPair = previousDice.slice(-1)[0];
 
     const newWord = this.state.currentWord;
 
-    if (clickedDice.length > 0 && (lastPair[0] === pos[0] && lastPair[1] === pos[1])) {
-      clickedDice.pop();
+    if (previousDice.length > 0 && this.checkEqualDie(lastPair, pos)) {
+      previousDice.pop();
       newWord.pop();
     }
-    else if (clickedDice.length === 0 || board.checkValidMove(lastPair, pos)) {
-      clickedDice.push(pos);
+    else if (previousDice.length === 0 || (board.checkValidMove(lastPair, pos) && this.checkIfNotClicked(pos))) {
+      previousDice.push(pos);
       newWord.push(letter);
-    } else {
-      console.log('invalid move');
     }
 
-    this.setState({ clickedDice: clickedDice, currentWord: newWord });
+    this.setState({ clickedDice: previousDice, currentWord: newWord });
   },
 
   updateScoreBoard(word) {
