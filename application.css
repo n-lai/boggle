@@ -26,6 +26,11 @@ html, body {
 
 body {
   background-color: #F57921;
+  text-align: center;
+}
+
+img {
+  padding: 10px;
 }
 
 #main {
@@ -61,6 +66,7 @@ body {
   font-size: 1.5em;
   font-weight: bold;
   background-color: white;
+  cursor: pointer;
 }
 
 .die:hover {
