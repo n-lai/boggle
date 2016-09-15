@@ -2,11 +2,16 @@ const Die = require('./die');
 const React = require('react');
 
 const Board = React.createClass({
+  handleClick(e) {
+    let letter = e.target.dataset.tag;
+    this.props.updateLetters(letter);
+  },
+
   render() {
     const board = this.props.board;
 
     return (
-      <div id='board'>
+      <div className='board' onClick={this.handleClick} id='board'>
         {this.renderRows()}
       </div>
     );

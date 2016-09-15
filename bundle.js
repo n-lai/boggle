@@ -61,6 +61,8 @@
 	"use strict";
 
 	var Board = __webpack_require__(2);
+	var CurrentWord = __webpack_require__(176);
+	var Score = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./score\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	var React = __webpack_require__(4);
 	var Boggle = __webpack_require__(37);
 
@@ -68,15 +70,31 @@
 	  displayName: 'Game',
 	  getInitialState: function getInitialState() {
 	    var board = new Boggle.Board(5);
-	    debugger;
-	    return { board: board };
+	    return { board: board, currentWord: [], submittedWords: {} };
 	  },
-	  updateGame: function updateGame() {},
+	  updateLetters: function updateLetters(letter) {
+	    var newWord = this.state.currentWord;
+	    newWord.push(letter);
+	    this.setState({ currentWord: newWord });
+	  },
+	  updateScoreBoard: function updateScoreBoard(word) {
+	    var previousWords = this.state.submittedWords;
+
+	    if (!previousWords.hasOwnProperty(word)) {
+	      var score = this.state.board.calculateScore(word);
+	      previousWords[word] = score;
+
+	      this.setState({ submittedWords: previousWords });
+	    }
+	    this.setState({ currentWord: [] });
+	  },
 	  render: function render() {
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(Board, { board: this.state.board, updateGame: this.updateGame })
+	      React.createElement(Board, { board: this.state.board, updateLetters: this.updateLetters }),
+	      React.createElement(CurrentWord, { currentWord: this.state.currentWord, updateScoreBoard: this.updateScoreBoard }),
+	      React.createElement(Score, { currentList: this.state.submittedWords })
 	    );
 	  }
 	});
@@ -94,12 +112,16 @@
 
 	var Board = React.createClass({
 	  displayName: 'Board',
+	  handleClick: function handleClick(e) {
+	    var letter = e.target.dataset.tag;
+	    this.props.updateLetters(letter);
+	  },
 	  render: function render() {
 	    var board = this.props.board;
 
 	    return React.createElement(
 	      'div',
-	      { id: 'board' },
+	      { className: 'board', onClick: this.handleClick, id: 'board' },
 	      this.renderRows()
 	    );
 	  },
@@ -134,18 +156,17 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var React = __webpack_require__(4);
 
 	var Die = React.createClass({
-	  displayName: 'Die',
-	  _handleClick: function _handleClick() {},
+	  displayName: "Die",
 	  render: function render() {
 	    var die = this.props.die;
 	    return React.createElement(
-	      'div',
-	      null,
+	      "div",
+	      { className: "die", "data-tag": die.letter },
 	      die.letter
 	    );
 	  }
@@ -4399,6 +4420,37 @@
 
 	Board.prototype.onBoard = function (pos) {
 	  return pos[0] >= 0 && pos[0] < this.gridSize && pos[1] >= 0 && pos[1] < this.gridSize;
+	};
+
+	Board.prototype.calculateScore = function (word) {
+	  debugger;
+	  var wordLength = word.length;
+	  var score = void 0;
+
+	  switch (wordLength) {
+	    case 1:
+	    case 2:
+	      score = 0;
+	      break;
+	    case 3:
+	    case 4:
+	      score = 1;
+	      break;
+	    case 5:
+	      score = 2;
+	      break;
+	    case 6:
+	      score = 3;
+	      break;
+	    case 7:
+	      score = 5;
+	      break;
+	    default:
+	      score = 11;
+	      break;
+	  }
+
+	  return score;
 	};
 
 	module.exports = {
@@ -21584,6 +21636,43 @@
 
 	module.exports = ReactDOMNullInputValuePropHook;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+
+/***/ },
+/* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(4);
+
+	var CurrentWord = React.createClass({
+	  displayName: 'CurrentWord',
+	  handleSubmit: function handleSubmit() {
+	    var word = this.props.currentWord.join('');
+
+	    this.props.updateScoreBoard(word);
+	  },
+	  render: function render() {
+	    var word = this.props.currentWord.join('');
+	    return React.createElement(
+	      'div',
+	      { className: 'current-word' },
+	      React.createElement(
+	        'h2',
+	        null,
+	        'Current Word: ',
+	        word
+	      ),
+	      React.createElement(
+	        'button',
+	        { type: 'submit', onClick: this.handleSubmit },
+	        'Submit'
+	      )
+	    );
+	  }
+	});
+
+	module.exports = CurrentWord;
 
 /***/ }
 /******/ ]);

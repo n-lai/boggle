@@ -24,7 +24,25 @@ html, body {
 }
 
 #main {
-  width: 600px;
+  width: 500px;
   margin: 0 auto;
   text-align: center;
+}
+
+#board {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+}
+
+.die {
+  height: 100px;
+  width: 100px;
+  margin: 2px;
+  border: 1px solid black;
+  color: black;
+  background-color: white;
 }
