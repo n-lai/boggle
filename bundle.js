@@ -89,7 +89,7 @@
 	  checkEqualDie: function checkEqualDie(pos1, pos2) {
 	    return pos1[0] === pos2[0] && pos1[1] === pos2[1];
 	  },
-	  updateLetters: function updateLetters(pos, letter) {
+	  updateLetters: function updateLetters(pos, letter, die) {
 	    var board = this.state.board;
 
 	    var previousDice = this.state.clickedDice;
@@ -100,29 +100,35 @@
 	    if (previousDice.length > 0 && this.checkEqualDie(lastPair, pos)) {
 	      previousDice.pop();
 	      newWord.pop();
+	      die.className = "die";
 	    } else if (previousDice.length === 0 || board.checkValidMove(lastPair, pos) && this.checkIfNotClicked(pos)) {
 	      previousDice.push(pos);
 	      newWord.push(letter);
+	      die.className = "die selected";
 	    }
-
 	    this.setState({ clickedDice: previousDice, currentWord: newWord });
 	  },
 	  updateScoreBoard: function updateScoreBoard(word) {
 	    var previousWords = this.state.submittedWords;
 
-	    if (!previousWords.hasOwnProperty(word)) {
+	    if (!previousWords.hasOwnProperty(word) && word.length > 0) {
 	      var score = this.state.board.calculateScore(word);
 	      previousWords[word] = score;
 
 	      this.setState({ submittedWords: previousWords });
 	    }
-	    this.setState({ currentWord: [] });
+	    this.setState({ currentWord: [], clickedDice: [] });
 	  },
 	  render: function render() {
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(Board, { board: this.state.board, updateLetters: this.updateLetters }),
+	      React.createElement(Board, {
+	        board: this.state.board,
+	        updateLetters: this.updateLetters,
+	        selectedDice: this.state.clickedDice,
+	        checkEqualDie: this.checkEqualDie
+	      }),
 	      React.createElement(CurrentWord, { currentWord: this.state.currentWord, updateScoreBoard: this.updateScoreBoard }),
 	      React.createElement(Score, { currentList: this.state.submittedWords })
 	    );
@@ -146,7 +152,7 @@
 	    var letter = e.target.dataset.letter;
 	    var pos = e.target.dataset.pos.split(',').map(Number);
 
-	    this.props.updateLetters(pos, letter);
+	    this.props.updateLetters(pos, letter, e.target);
 	  },
 	  render: function render() {
 	    var board = this.props.board;
@@ -173,11 +179,16 @@
 	    var _this2 = this;
 
 	    var board = this.props.board;
+	    var selectedDice = this.props.selectedDice;
+	    var checkIfEqual = this.props.checkEqualDie;
+
 	    return row.map(function (die, j) {
+
 	      return React.createElement(Die, {
 	        die: die,
 	        updateGame: _this2.props.updateGame,
-	        key: i * board.gridSize + j });
+	        key: i * board.gridSize + j
+	      });
 	    });
 	  }
 	});
@@ -4409,6 +4420,7 @@
 	function Die(possibleLetters, board, pos) {
 	  this.board = board;
 	  this.pos = pos;
+	  this.clicked = false;
 	  this.letter = this.randomize(possibleLetters);
 	}
 
@@ -4459,7 +4471,7 @@
 
 	Board.prototype.checkValidMove = function (currentDiePos, nextDiePos) {
 	  var availableMoves = this.availableMoves(currentDiePos);
-
+	  // console.log(availableMoves);
 	  var valid = false;
 
 	  availableMoves.forEach(function (move) {
@@ -4476,6 +4488,7 @@
 	  var score = void 0;
 
 	  switch (wordLength) {
+	    case 0:
 	    case 1:
 	    case 2:
 	      score = 0;
@@ -21708,13 +21721,18 @@
 	      React.createElement(
 	        'h2',
 	        null,
-	        'Current Word: ',
+	        React.createElement(
+	          'b',
+	          null,
+	          'Current Word'
+	        ),
+	        ': ',
 	        word
 	      ),
 	      React.createElement(
 	        'button',
 	        { type: 'submit', onClick: this.handleSubmit },
-	        'Submit'
+	        'Submit Word'
 	      )
 	    );
 	  }

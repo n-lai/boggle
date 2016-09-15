@@ -9,6 +9,7 @@ const BOGGLE_DICE = [
 function Die(possibleLetters, board, pos) {
   this.board = board;
   this.pos = pos;
+  this.clicked = false;
   this.letter = this.randomize(possibleLetters);
 }
 
@@ -60,7 +61,7 @@ Board.prototype.availableMoves = function(diePos) {
 
 Board.prototype.checkValidMove = function(currentDiePos, nextDiePos) {
   const availableMoves = this.availableMoves(currentDiePos);
-
+  // console.log(availableMoves);
   let valid = false;
 
   availableMoves.forEach(move => {
@@ -77,6 +78,7 @@ Board.prototype.calculateScore = function(word) {
   let score;
 
   switch(wordLength) {
+    case 0:
     case 1:
     case 2:
       score = 0;

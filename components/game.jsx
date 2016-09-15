@@ -29,42 +29,48 @@ const Game = React.createClass({
     return pos1[0] === pos2[0] && pos1[1] === pos2[1]
   },
 
-  updateLetters(pos, letter) {
+  updateLetters(pos, letter, die) {
     const board = this.state.board;
 
     const previousDice = this.state.clickedDice;
     const lastPair = previousDice.slice(-1)[0];
-
+    
     const newWord = this.state.currentWord;
 
     if (previousDice.length > 0 && this.checkEqualDie(lastPair, pos)) {
       previousDice.pop();
       newWord.pop();
+      die.className = "die";
     }
     else if (previousDice.length === 0 || (board.checkValidMove(lastPair, pos) && this.checkIfNotClicked(pos))) {
       previousDice.push(pos);
       newWord.push(letter);
+      die.className = "die selected";
     }
-
     this.setState({ clickedDice: previousDice, currentWord: newWord });
   },
 
   updateScoreBoard(word) {
     const previousWords = this.state.submittedWords;
 
-    if (!previousWords.hasOwnProperty(word)) {
+    if (!previousWords.hasOwnProperty(word) && word.length > 0) {
       let score = this.state.board.calculateScore(word);
       previousWords[word] = score;
 
       this.setState({ submittedWords: previousWords});
     }
-    this.setState({ currentWord: [] });
+    this.setState({ currentWord: [], clickedDice: [] });
   },
 
   render() {
     return (
       <div>
-        <Board board={this.state.board} updateLetters={this.updateLetters} />
+        <Board
+          board={this.state.board}
+          updateLetters={this.updateLetters}
+          selectedDice={this.state.clickedDice}
+          checkEqualDie={this.checkEqualDie}
+        />
         <CurrentWord currentWord={this.state.currentWord} updateScoreBoard={this.updateScoreBoard}/>
         <Score currentList={this.state.submittedWords} />
       </div>

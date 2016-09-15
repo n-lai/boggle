@@ -5,8 +5,8 @@ const Board = React.createClass({
   handleClick(e) {
     let letter = e.target.dataset.letter;
     let pos = e.target.dataset.pos.split(',').map(Number);
-    
-    this.props.updateLetters(pos, letter);
+
+    this.props.updateLetters(pos, letter, e.target);
   },
 
   render() {
@@ -32,12 +32,17 @@ const Board = React.createClass({
 
   renderDice(row, i) {
     const board = this.props.board;
+    const selectedDice = this.props.selectedDice;
+    const checkIfEqual = this.props.checkEqualDie;
+
     return row.map( (die, j) => {
+
       return (
         <Die
           die={die}
           updateGame={this.props.updateGame}
-          key={i * board.gridSize + j} />
+          key={i * board.gridSize + j}
+        />
       );
     });
   }

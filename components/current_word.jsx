@@ -12,8 +12,8 @@ const CurrentWord = React.createClass({
     let word = this.props.currentWord.join('');
     return (
       <div className="current-word">
-        <h2>Current Word: {word}</h2>
-        <button type="submit" onClick={this.handleSubmit}>Submit</button>
+        <h2><b>Current Word</b>: {word}</h2>
+        <button type="submit" onClick={this.handleSubmit}>Submit Word</button>
       </div>
     )
   }
