@@ -70,12 +70,27 @@
 	  displayName: 'Game',
 	  getInitialState: function getInitialState() {
 	    var board = new Boggle.Board(5);
-	    return { board: board, currentWord: [], submittedWords: {} };
+	    return { board: board, currentWord: [], submittedWords: {}, clickedDice: [] };
 	  },
-	  updateLetters: function updateLetters(letter) {
+	  updateLetters: function updateLetters(pos, letter) {
+	    var board = this.state.board;
+
+	    var clickedDice = this.state.clickedDice;
+	    var lastPair = clickedDice.slice(-1)[0];
+
 	    var newWord = this.state.currentWord;
-	    newWord.push(letter);
-	    this.setState({ currentWord: newWord });
+
+	    if (clickedDice.length > 0 && lastPair[0] === pos[0] && lastPair[1] === pos[1]) {
+	      clickedDice.pop();
+	      newWord.pop();
+	    } else if (clickedDice.length === 0 || board.checkValidMove(lastPair, pos)) {
+	      clickedDice.push(pos);
+	      newWord.push(letter);
+	    } else {
+	      console.log('invalid move');
+	    }
+
+	    this.setState({ clickedDice: clickedDice, currentWord: newWord });
 	  },
 	  updateScoreBoard: function updateScoreBoard(word) {
 	    var previousWords = this.state.submittedWords;
@@ -113,8 +128,10 @@
 	var Board = React.createClass({
 	  displayName: 'Board',
 	  handleClick: function handleClick(e) {
-	    var letter = e.target.dataset.tag;
-	    this.props.updateLetters(letter);
+	    var letter = e.target.dataset.letter;
+	    var pos = e.target.dataset.pos.split(',').map(Number);
+
+	    this.props.updateLetters(pos, letter);
 	  },
 	  render: function render() {
 	    var board = this.props.board;
@@ -166,7 +183,7 @@
 	    var die = this.props.die;
 	    return React.createElement(
 	      "div",
-	      { className: "die", "data-tag": die.letter },
+	      { className: "die", "data-letter": die.letter, "data-pos": die.pos },
 	      die.letter
 	    );
 	  }
@@ -4382,7 +4399,7 @@
 
 	Die.prototype.randomize = function (possibleLetters) {
 	  var randomIdx = Math.floor(Math.random() * 6);
-	  return possibleLetters.split("")[randomIdx];
+	  return possibleLetters.split('')[randomIdx];
 	};
 
 	Die.DELTAS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
@@ -4418,12 +4435,28 @@
 	  }
 	};
 
-	Board.prototype.onBoard = function (pos) {
-	  return pos[0] >= 0 && pos[0] < this.gridSize && pos[1] >= 0 && pos[1] < this.gridSize;
+	Board.prototype.availableMoves = function (diePos) {
+
+	  return Die.DELTAS.map(function (delta) {
+	    return [diePos[0] + delta[0], diePos[1] + delta[1]];
+	  });
+	};
+
+	Board.prototype.checkValidMove = function (currentDiePos, nextDiePos) {
+	  var availableMoves = this.availableMoves(currentDiePos);
+
+	  var valid = false;
+
+	  availableMoves.forEach(function (move) {
+	    if (move[0] === nextDiePos[0] && move[1] === nextDiePos[1]) {
+	      valid = true;
+	    }
+	  });
+
+	  return valid;
 	};
 
 	Board.prototype.calculateScore = function (word) {
-	  debugger;
 	  var wordLength = word.length;
 	  var score = void 0;
 
@@ -21683,11 +21716,62 @@
 	var React = __webpack_require__(4);
 
 	var Score = React.createClass({
-	  displayName: "Score",
+	  displayName: 'Score',
 	  render: function render() {
 	    var currentList = this.props.currentList;
-	    var words = currentList.keys();
-	    var scores = currentList.values();
+	    var words = Object.keys(currentList);
+	    var scores = words.map(function (word) {
+	      return currentList[word];
+	    });
+
+	    return React.createElement(
+	      'div',
+	      { className: 'scoreboard' },
+	      React.createElement(
+	        'ul',
+	        null,
+	        React.createElement(
+	          'li',
+	          null,
+	          'Words'
+	        ),
+	        words.map(function (word) {
+	          return React.createElement(
+	            'li',
+	            { key: word },
+	            word
+	          );
+	        }),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Total:'
+	        )
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        React.createElement(
+	          'li',
+	          null,
+	          'Points'
+	        ),
+	        words.map(function (word) {
+	          return React.createElement(
+	            'li',
+	            { key: word + currentList[word] },
+	            currentList[word]
+	          );
+	        }),
+	        React.createElement(
+	          'li',
+	          null,
+	          scores.reduce(function (a, b) {
+	            return a + b;
+	          }, 0)
+	        )
+	      )
+	    );
 	  }
 	});
 

@@ -9,13 +9,29 @@ const Boggle = require('../boggle');
 const Game = React.createClass({
   getInitialState() {
     const board = new Boggle.Board(5);
-    return ({ board: board, currentWord: [], submittedWords: {} });
+    return ({ board: board, currentWord: [], submittedWords: {}, clickedDice: [] });
   },
 
-  updateLetters(letter) {
+  updateLetters(pos, letter) {
+    const board = this.state.board;
+
+    const clickedDice = this.state.clickedDice;
+    const lastPair = clickedDice.slice(-1)[0];
+
     const newWord = this.state.currentWord;
-    newWord.push(letter);
-    this.setState({ currentWord: newWord });
+
+    if (clickedDice.length > 0 && (lastPair[0] === pos[0] && lastPair[1] === pos[1])) {
+      clickedDice.pop();
+      newWord.pop();
+    }
+    else if (clickedDice.length === 0 || board.checkValidMove(lastPair, pos)) {
+      clickedDice.push(pos);
+      newWord.push(letter);
+    } else {
+      console.log('invalid move');
+    }
+
+    this.setState({ clickedDice: clickedDice, currentWord: newWord });
   },
 
   updateScoreBoard(word) {

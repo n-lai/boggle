@@ -3,8 +3,10 @@ const React = require('react');
 
 const Board = React.createClass({
   handleClick(e) {
-    let letter = e.target.dataset.tag;
-    this.props.updateLetters(letter);
+    let letter = e.target.dataset.letter;
+    let pos = e.target.dataset.pos.split(',').map(Number);
+    
+    this.props.updateLetters(pos, letter);
   },
 
   render() {

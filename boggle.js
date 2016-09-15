@@ -14,7 +14,7 @@ function Die(possibleLetters, board, pos) {
 
 Die.prototype.randomize = function(possibleLetters) {
   const randomIdx = Math.floor(Math.random() * 6);
-  return possibleLetters.split("")[randomIdx];
+  return possibleLetters.split('')[randomIdx];
 }
 
 Die.DELTAS = [
@@ -49,15 +49,30 @@ Board.prototype.generateBoard = function() {
   }
 }
 
-Board.prototype.onBoard = function(pos) {
+Board.prototype.availableMoves = function(diePos) {
+
   return (
-    pos[0] >= 0 && pos[0] < this.gridSize &&
-    pos[1] >= 0 && pos[1] < this.gridSize
-  );
-};
+    Die.DELTAS.map(delta => {
+      return [diePos[0] + delta[0], diePos[1] + delta[1]]
+    })
+  )
+}
+
+Board.prototype.checkValidMove = function(currentDiePos, nextDiePos) {
+  const availableMoves = this.availableMoves(currentDiePos);
+
+  let valid = false;
+
+  availableMoves.forEach(move => {
+    if (move[0] === nextDiePos[0] && move[1] === nextDiePos[1]) {
+      valid = true;
+    }
+  });
+
+  return valid;
+}
 
 Board.prototype.calculateScore = function(word) {
-  debugger
   const wordLength = word.length;
   let score;
 
