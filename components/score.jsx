@@ -13,24 +13,24 @@ const Score = React.createClass({
 
     return (
       <div className='scoreboard'>
-        <ul>
-          <li>Words</li>
+        <ul className='words'>
+          <li><b>Words</b></li>
             {
               words.map(word => {
-                return <li key={word}>{word}</li>;
+                return <li key={word}>{word.toLowerCase()}</li>;
               })
             }
-          <li>Total:</li>
+          <li><b>Total:</b></li>
         </ul>
 
-        <ul>
-          <li>Points</li>
+        <ul className='score'>
+          <li><b>Score</b></li>
             {
               words.map(word => {
                 return <li key={word + currentList[word]}>{currentList[word]}</li>
               })
             }
-          <li>{scores.reduce((a, b) => a + b, 0)}</li>
+          <li><b>{scores.reduce((a, b) => a + b, 0)}</b></li>
         </ul>
       </div>
     )

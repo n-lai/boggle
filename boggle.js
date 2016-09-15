@@ -9,13 +9,18 @@ const BOGGLE_DICE = [
 function Die(possibleLetters, board, pos) {
   this.board = board;
   this.pos = pos;
-  this.clicked = false;
   this.letter = this.randomize(possibleLetters);
 }
 
 Die.prototype.randomize = function(possibleLetters) {
   const randomIdx = Math.floor(Math.random() * 6);
-  return possibleLetters.split('')[randomIdx];
+  let letter = possibleLetters.split('')[randomIdx];
+
+  if (letter === 'Q') {
+    return 'Qu';
+  }
+
+  return letter;
 }
 
 Die.DELTAS = [

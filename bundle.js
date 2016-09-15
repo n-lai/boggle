@@ -118,6 +118,7 @@
 	      this.setState({ submittedWords: previousWords });
 	    }
 	    this.setState({ currentWord: [], clickedDice: [] });
+	    $('.die').removeClass("selected");
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -4420,13 +4421,18 @@
 	function Die(possibleLetters, board, pos) {
 	  this.board = board;
 	  this.pos = pos;
-	  this.clicked = false;
 	  this.letter = this.randomize(possibleLetters);
 	}
 
 	Die.prototype.randomize = function (possibleLetters) {
 	  var randomIdx = Math.floor(Math.random() * 6);
-	  return possibleLetters.split('')[randomIdx];
+	  var letter = possibleLetters.split('')[randomIdx];
+
+	  if (letter === 'Q') {
+	    return 'Qu';
+	  }
+
+	  return letter;
 	};
 
 	Die.DELTAS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
@@ -21727,7 +21733,7 @@
 	          'Current Word'
 	        ),
 	        ': ',
-	        word
+	        word.toUpperCase()
 	      ),
 	      React.createElement(
 	        'button',
@@ -21762,32 +21768,44 @@
 	      { className: 'scoreboard' },
 	      React.createElement(
 	        'ul',
-	        null,
+	        { className: 'words' },
 	        React.createElement(
 	          'li',
 	          null,
-	          'Words'
+	          React.createElement(
+	            'b',
+	            null,
+	            'Words'
+	          )
 	        ),
 	        words.map(function (word) {
 	          return React.createElement(
 	            'li',
 	            { key: word },
-	            word
+	            word.toLowerCase()
 	          );
 	        }),
 	        React.createElement(
 	          'li',
 	          null,
-	          'Total:'
+	          React.createElement(
+	            'b',
+	            null,
+	            'Total:'
+	          )
 	        )
 	      ),
 	      React.createElement(
 	        'ul',
-	        null,
+	        { className: 'score' },
 	        React.createElement(
 	          'li',
 	          null,
-	          'Points'
+	          React.createElement(
+	            'b',
+	            null,
+	            'Score'
+	          )
 	        ),
 	        words.map(function (word) {
 	          return React.createElement(
@@ -21799,9 +21817,13 @@
 	        React.createElement(
 	          'li',
 	          null,
-	          scores.reduce(function (a, b) {
-	            return a + b;
-	          }, 0)
+	          React.createElement(
+	            'b',
+	            null,
+	            scores.reduce(function (a, b) {
+	              return a + b;
+	            }, 0)
+	          )
 	        )
 	      )
 	    );

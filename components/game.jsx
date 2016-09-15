@@ -34,7 +34,7 @@ const Game = React.createClass({
 
     const previousDice = this.state.clickedDice;
     const lastPair = previousDice.slice(-1)[0];
-    
+
     const newWord = this.state.currentWord;
 
     if (previousDice.length > 0 && this.checkEqualDie(lastPair, pos)) {
@@ -60,6 +60,7 @@ const Game = React.createClass({
       this.setState({ submittedWords: previousWords});
     }
     this.setState({ currentWord: [], clickedDice: [] });
+    $('.die').removeClass("selected");
   },
 
   render() {

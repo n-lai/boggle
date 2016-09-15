@@ -12,7 +12,7 @@ const CurrentWord = React.createClass({
     let word = this.props.currentWord.join('');
     return (
       <div className="current-word">
-        <h2><b>Current Word</b>: {word}</h2>
+        <h2><b>Current Word</b>: {word.toUpperCase()}</h2>
         <button type="submit" onClick={this.handleSubmit}>Submit Word</button>
       </div>
     )
