@@ -1,6 +1,7 @@
 html, body {
   height: 100%;
   width: 100%;
+  background-color: #F57921;
 }
  html, body, section, article, h1, h2, h3, h6, p, strong, em, a, select, ul, li, input,a textarea, button, img {
   margin: 0;
@@ -23,6 +24,10 @@ html, body {
   list-style-type: none;
 }
 
+body {
+  background-color: #F57921;
+}
+
 #main {
   width: 500px;
   margin: 0 auto;
@@ -32,6 +37,10 @@ html, body {
 #board {
   display: flex;
   flex-direction: column;
+  background-color: #398BD4;
+  border: 5px solid #FFCA08;
+  width: 435px;
+  padding: 5px;
 }
 
 .row {
@@ -39,10 +48,21 @@ html, body {
 }
 
 .die {
-  height: 100px;
-  width: 100px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 75px;
+  width: 75px;
   margin: 2px;
   border: 1px solid black;
+  border-radius: 5px;
+  margin: 5px;
   color: black;
+  font-size: 1.5em;
+  font-weight: bold;
   background-color: white;
+}
+
+.die:hover {
+  background-color: #ACCEEC;
 }
