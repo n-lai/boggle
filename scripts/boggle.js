@@ -67,12 +67,15 @@ Board.prototype.checkValidMove = function(currentDiePos, nextDiePos) {
 Board.prototype.calculateScore = function(word) {
   const wordLength = word.length;
   let score;
-
+  debugger
   switch(wordLength) {
-    case (wordLength < 3):
+    case 0:
+    case 1:
+    case 2:
       score = 0;
       break;
-    case (wordLength < 5):
+    case 3:
+    case 4:
       score = 1;
       break;
     case 5:
@@ -88,7 +91,7 @@ Board.prototype.calculateScore = function(word) {
       score = 11;
       break;
   }
-
+  debugger
   return score;
 };
 

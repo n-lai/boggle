@@ -4,7 +4,7 @@ const Board = require('./board');
 const CurrentWord = require('./current_word');
 const Score = require('./score');
 const React = require('react');
-const Boggle = require('../scripts/boggle');
+const Boggle = require('../scripts/boggle.js');
 
 const Game = React.createClass({
   getInitialState() {
@@ -56,6 +56,7 @@ const Game = React.createClass({
 
     if (!previousWords.hasOwnProperty(word) && word.length > 0) {
       let score = this.state.board.calculateScore(word);
+      debugger
       previousWords[word] = score;
 
       this.setState({ submittedWords: previousWords});
