@@ -28,18 +28,6 @@ Die.DELTAS = [
   [0,  1], [1, -1], [1,  0], [1,  1]
 ];
 
-Die.prototype.neighbors = function() {
-  const adjacentCoords = [];
-  Die.DELTAS.forEach(delta => {
-    const newPos = [delta[0] + this.pos[0], delta[1] + this.pos[1]];
-    if (this.board.onBoard(newPos)) {
-      adjacentCoords.push(newPos);
-    }
-  });
-
-  return adjacentCoords.map(coord => this.board.grid[coord[0]][coord[1]]);
-};
-
 function Board(gridSize) {
   this.gridSize = gridSize;
   this.grid = [];
@@ -66,7 +54,6 @@ Board.prototype.availableMoves = function(diePos) {
 
 Board.prototype.checkValidMove = function(currentDiePos, nextDiePos) {
   const availableMoves = this.availableMoves(currentDiePos);
-  // console.log(availableMoves);
   let valid = false;
 
   availableMoves.forEach(move => {

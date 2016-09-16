@@ -4,7 +4,7 @@ const Board = require('./board');
 const CurrentWord = require('./current_word');
 const Score = require('./score');
 const React = require('react');
-const Boggle = require('../boggle');
+const Boggle = require('../scripts/boggle');
 
 const Game = React.createClass({
   getInitialState() {
