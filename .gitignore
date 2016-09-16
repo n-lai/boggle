@@ -9,3 +9,5 @@
 node_modules/
 
 boggle-spec.pdf
+
+bundle.js
