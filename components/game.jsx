@@ -38,11 +38,12 @@ const Game = React.createClass({
     const newWord = this.state.currentWord;
 
     if (previousDice.length > 0 && this.checkEqualDie(lastPair, pos)) {
+      // Check if die needs to be removed
       previousDice.pop();
       newWord.pop();
       die.className = "die";
-    }
-    else if (previousDice.length === 0 || (board.checkValidMove(lastPair, pos) && this.checkIfNotClicked(pos))) {
+    } else if (previousDice.length === 0 || (board.checkValidMove(lastPair, pos) && this.checkIfNotClicked(pos))) {
+      // Check if die is valid move
       previousDice.push(pos);
       newWord.push(letter);
       die.className = "die selected";
@@ -59,6 +60,8 @@ const Game = React.createClass({
 
       this.setState({ submittedWords: previousWords});
     }
+
+    // Clear Board
     this.setState({ currentWord: [], clickedDice: [] });
     $('.die').removeClass("selected");
   },

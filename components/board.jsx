@@ -36,7 +36,7 @@ const Board = React.createClass({
     const checkIfEqual = this.props.checkEqualDie;
 
     return row.map( (die, j) => {
-
+      
       return (
         <Die
           die={die}

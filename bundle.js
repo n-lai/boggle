@@ -98,10 +98,12 @@
 	    var newWord = this.state.currentWord;
 
 	    if (previousDice.length > 0 && this.checkEqualDie(lastPair, pos)) {
+	      // Check if die needs to be removed
 	      previousDice.pop();
 	      newWord.pop();
 	      die.className = "die";
 	    } else if (previousDice.length === 0 || board.checkValidMove(lastPair, pos) && this.checkIfNotClicked(pos)) {
+	      // Check if die is valid move
 	      previousDice.push(pos);
 	      newWord.push(letter);
 	      die.className = "die selected";
@@ -117,6 +119,8 @@
 
 	      this.setState({ submittedWords: previousWords });
 	    }
+
+	    // Clear Board
 	    this.setState({ currentWord: [], clickedDice: [] });
 	    $('.die').removeClass("selected");
 	  },
@@ -4422,7 +4426,7 @@
 	  this.board = board;
 	  this.pos = pos;
 	  this.letter = this.randomize(possibleLetters);
-	}
+	};
 
 	Die.prototype.randomize = function (possibleLetters) {
 	  var randomIdx = Math.floor(Math.random() * 6);
@@ -4431,33 +4435,16 @@
 	  if (letter === 'Q') {
 	    return 'Qu';
 	  }
-
 	  return letter;
 	};
 
 	Die.DELTAS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
 
-	Die.prototype.neighbors = function () {
-	  var _this = this;
-
-	  var adjacentCoords = [];
-	  Die.DELTAS.forEach(function (delta) {
-	    var newPos = [delta[0] + _this.pos[0], delta[1] + _this.pos[1]];
-	    if (_this.board.onBoard(newPos)) {
-	      adjacentCoords.push(newPos);
-	    }
-	  });
-
-	  return adjacentCoords.map(function (coord) {
-	    return _this.board.grid[coord[0]][coord[1]];
-	  });
-	};
-
 	function Board(gridSize) {
 	  this.gridSize = gridSize;
 	  this.grid = [];
 	  this.generateBoard();
-	}
+	};
 
 	Board.prototype.generateBoard = function () {
 	  for (var i = 0; i < this.gridSize; i++) {
@@ -4477,7 +4464,6 @@
 
 	Board.prototype.checkValidMove = function (currentDiePos, nextDiePos) {
 	  var availableMoves = this.availableMoves(currentDiePos);
-	  // console.log(availableMoves);
 	  var valid = false;
 
 	  availableMoves.forEach(function (move) {
@@ -4494,13 +4480,10 @@
 	  var score = void 0;
 
 	  switch (wordLength) {
-	    case 0:
-	    case 1:
-	    case 2:
+	    case wordLength < 3:
 	      score = 0;
 	      break;
-	    case 3:
-	    case 4:
+	    case wordLength < 5:
 	      score = 1;
 	      break;
 	    case 5:

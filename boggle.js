@@ -10,7 +10,7 @@ function Die(possibleLetters, board, pos) {
   this.board = board;
   this.pos = pos;
   this.letter = this.randomize(possibleLetters);
-}
+};
 
 Die.prototype.randomize = function(possibleLetters) {
   const randomIdx = Math.floor(Math.random() * 6);
@@ -19,32 +19,19 @@ Die.prototype.randomize = function(possibleLetters) {
   if (letter === 'Q') {
     return 'Qu';
   }
-
   return letter;
-}
+};
 
 Die.DELTAS = [
   [-1, -1], [-1,  0], [-1,  1], [0, -1],
   [0,  1], [1, -1], [1,  0], [1,  1]
 ];
 
-Die.prototype.neighbors = function() {
-  const adjacentCoords = [];
-  Die.DELTAS.forEach(delta => {
-    const newPos = [delta[0] + this.pos[0], delta[1] + this.pos[1]];
-    if (this.board.onBoard(newPos)) {
-      adjacentCoords.push(newPos);
-    }
-  });
-
-  return adjacentCoords.map(coord => this.board.grid[coord[0]][coord[1]]);
-};
-
 function Board(gridSize) {
   this.gridSize = gridSize;
   this.grid = [];
   this.generateBoard();
-}
+};
 
 Board.prototype.generateBoard = function() {
   for (let i = 0; i < this.gridSize; i++) {
@@ -53,7 +40,7 @@ Board.prototype.generateBoard = function() {
       this.grid[i].push(new Die(BOGGLE_DICE[i][j], this, [i, j]))
     }
   }
-}
+};
 
 Board.prototype.availableMoves = function(diePos) {
 
@@ -62,11 +49,10 @@ Board.prototype.availableMoves = function(diePos) {
       return [diePos[0] + delta[0], diePos[1] + delta[1]]
     })
   )
-}
+};
 
 Board.prototype.checkValidMove = function(currentDiePos, nextDiePos) {
   const availableMoves = this.availableMoves(currentDiePos);
-  // console.log(availableMoves);
   let valid = false;
 
   availableMoves.forEach(move => {
@@ -76,20 +62,17 @@ Board.prototype.checkValidMove = function(currentDiePos, nextDiePos) {
   });
 
   return valid;
-}
+};
 
 Board.prototype.calculateScore = function(word) {
   const wordLength = word.length;
   let score;
 
   switch(wordLength) {
-    case 0:
-    case 1:
-    case 2:
+    case (wordLength < 3):
       score = 0;
       break;
-    case 3:
-    case 4:
+    case (wordLength < 5):
       score = 1;
       break;
     case 5:
@@ -107,7 +90,7 @@ Board.prototype.calculateScore = function(word) {
   }
 
   return score;
-}
+};
 
 module.exports = {
   Board,
