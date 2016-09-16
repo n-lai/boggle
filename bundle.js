@@ -64,7 +64,7 @@
 	var CurrentWord = __webpack_require__(176);
 	var Score = __webpack_require__(177);
 	var React = __webpack_require__(4);
-	var Boggle = __webpack_require__(37);
+	var Boggle = __webpack_require__(178);
 
 	var Game = React.createClass({
 	  displayName: 'Game',
@@ -4415,100 +4415,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 37 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var BOGGLE_DICE = [['AAAFRS', 'AAEEEE', 'AAFIRS', 'ADENNN', 'AEEEEM'], ['AEEGMU', 'AEGMNN', 'AFIRSY', 'BJKQXZ', 'CCENST'], ['CEIILT', 'CEILPT', 'CEIPST', 'DDHNOT', 'DHHLOR'], ['DHLNOR', 'DHLNOR', 'EIIITT', 'EMOTTT', 'ENSSSU'], ['FIPRSY', 'GORRVW', 'IPRRRY', 'NOOTUW', 'OOOTTU']];
-
-	function Die(possibleLetters, board, pos) {
-	  this.board = board;
-	  this.pos = pos;
-	  this.letter = this.randomize(possibleLetters);
-	};
-
-	Die.prototype.randomize = function (possibleLetters) {
-	  var randomIdx = Math.floor(Math.random() * 6);
-	  var letter = possibleLetters.split('')[randomIdx];
-
-	  if (letter === 'Q') {
-	    return 'Qu';
-	  }
-	  return letter;
-	};
-
-	Die.DELTAS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
-
-	function Board(gridSize) {
-	  this.gridSize = gridSize;
-	  this.grid = [];
-	  this.generateBoard();
-	};
-
-	Board.prototype.generateBoard = function () {
-	  for (var i = 0; i < this.gridSize; i++) {
-	    this.grid.push([]);
-	    for (var j = 0; j < this.gridSize; j++) {
-	      this.grid[i].push(new Die(BOGGLE_DICE[i][j], this, [i, j]));
-	    }
-	  }
-	};
-
-	Board.prototype.availableMoves = function (diePos) {
-
-	  return Die.DELTAS.map(function (delta) {
-	    return [diePos[0] + delta[0], diePos[1] + delta[1]];
-	  });
-	};
-
-	Board.prototype.checkValidMove = function (currentDiePos, nextDiePos) {
-	  var availableMoves = this.availableMoves(currentDiePos);
-	  var valid = false;
-
-	  availableMoves.forEach(function (move) {
-	    if (move[0] === nextDiePos[0] && move[1] === nextDiePos[1]) {
-	      valid = true;
-	    }
-	  });
-
-	  return valid;
-	};
-
-	Board.prototype.calculateScore = function (word) {
-	  var wordLength = word.length;
-	  var score = void 0;
-
-	  switch (wordLength) {
-	    case wordLength < 3:
-	      score = 0;
-	      break;
-	    case wordLength < 5:
-	      score = 1;
-	      break;
-	    case 5:
-	      score = 2;
-	      break;
-	    case 6:
-	      score = 3;
-	      break;
-	    case 7:
-	      score = 5;
-	      break;
-	    default:
-	      score = 11;
-	      break;
-	  }
-
-	  return score;
-	};
-
-	module.exports = {
-	  Board: Board,
-	  Die: Die
-	};
-
-/***/ },
+/* 37 */,
 /* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -21814,6 +21721,100 @@
 	});
 
 	module.exports = Score;
+
+/***/ },
+/* 178 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var BOGGLE_DICE = [['AAAFRS', 'AAEEEE', 'AAFIRS', 'ADENNN', 'AEEEEM'], ['AEEGMU', 'AEGMNN', 'AFIRSY', 'BJKQXZ', 'CCENST'], ['CEIILT', 'CEILPT', 'CEIPST', 'DDHNOT', 'DHHLOR'], ['DHLNOR', 'DHLNOR', 'EIIITT', 'EMOTTT', 'ENSSSU'], ['FIPRSY', 'GORRVW', 'IPRRRY', 'NOOTUW', 'OOOTTU']];
+
+	function Die(possibleLetters, board, pos) {
+	  this.board = board;
+	  this.pos = pos;
+	  this.letter = this.randomize(possibleLetters);
+	};
+
+	Die.prototype.randomize = function (possibleLetters) {
+	  var randomIdx = Math.floor(Math.random() * 6);
+	  var letter = possibleLetters.split('')[randomIdx];
+
+	  if (letter === 'Q') {
+	    return 'Qu';
+	  }
+	  return letter;
+	};
+
+	Die.DELTAS = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+
+	function Board(gridSize) {
+	  this.gridSize = gridSize;
+	  this.grid = [];
+	  this.generateBoard();
+	};
+
+	Board.prototype.generateBoard = function () {
+	  for (var i = 0; i < this.gridSize; i++) {
+	    this.grid.push([]);
+	    for (var j = 0; j < this.gridSize; j++) {
+	      this.grid[i].push(new Die(BOGGLE_DICE[i][j], this, [i, j]));
+	    }
+	  }
+	};
+
+	Board.prototype.availableMoves = function (diePos) {
+
+	  return Die.DELTAS.map(function (delta) {
+	    return [diePos[0] + delta[0], diePos[1] + delta[1]];
+	  });
+	};
+
+	Board.prototype.checkValidMove = function (currentDiePos, nextDiePos) {
+	  var availableMoves = this.availableMoves(currentDiePos);
+	  var valid = false;
+
+	  availableMoves.forEach(function (move) {
+	    if (move[0] === nextDiePos[0] && move[1] === nextDiePos[1]) {
+	      valid = true;
+	    }
+	  });
+
+	  return valid;
+	};
+
+	Board.prototype.calculateScore = function (word) {
+	  var wordLength = word.length;
+	  var score = void 0;
+
+	  switch (wordLength) {
+	    case wordLength < 3:
+	      score = 0;
+	      break;
+	    case wordLength < 5:
+	      score = 1;
+	      break;
+	    case 5:
+	      score = 2;
+	      break;
+	    case 6:
+	      score = 3;
+	      break;
+	    case 7:
+	      score = 5;
+	      break;
+	    default:
+	      score = 11;
+	      break;
+	  }
+
+	  return score;
+	};
+
+	module.exports = {
+	  Board: Board,
+	  Die: Die
+	};
 
 /***/ }
 /******/ ]);
