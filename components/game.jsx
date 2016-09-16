@@ -56,7 +56,6 @@ const Game = React.createClass({
 
     if (!previousWords.hasOwnProperty(word) && word.length > 0) {
       let score = this.state.board.calculateScore(word);
-      debugger
       previousWords[word] = score;
 
       this.setState({ submittedWords: previousWords});

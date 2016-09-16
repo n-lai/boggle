@@ -115,7 +115,6 @@
 
 	    if (!previousWords.hasOwnProperty(word) && word.length > 0) {
 	      var score = this.state.board.calculateScore(word);
-	      debugger;
 	      previousWords[word] = score;
 
 	      this.setState({ submittedWords: previousWords });
@@ -21787,7 +21786,6 @@
 	Board.prototype.calculateScore = function (word) {
 	  var wordLength = word.length;
 	  var score = void 0;
-	  debugger;
 	  switch (wordLength) {
 	    case 0:
 	    case 1:
@@ -21811,7 +21809,6 @@
 	      score = 11;
 	      break;
 	  }
-	  debugger;
 	  return score;
 	};
 
